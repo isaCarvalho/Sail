@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Sail</string>
+    <string name="https_url_com">https://url.com</string>
+    <string name="go">go</string>
+    <string name="favorites">favorites</string>
+    <string name="home">home</string>
+    <string name="home_url">https://www.google.com</string>
+</resources>

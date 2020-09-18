@@ -21,6 +21,12 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/share_icon"
+        android:title="@string/share"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_share"/>
+
+    <item
         android:id="@+id/history_icon"
         android:title="@string/history" />
 

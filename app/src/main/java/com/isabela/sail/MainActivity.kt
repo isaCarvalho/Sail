@@ -1,6 +1,7 @@
 package com.isabela.sail
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.KeyEvent
@@ -90,6 +91,20 @@ class MainActivity : AppCompatActivity() {
                 // redirects to google as home page
                 webView.loadUrl("https://www.google.com")
                 urlEditText.setText(R.string.home_url)
+                true
+            }
+
+            R.id.share_icon -> {
+                if (urlEditText.text.isNotEmpty()) {
+                    val sendIntent = Intent().apply {
+                        action = Intent.ACTION_SEND
+                        putExtra(Intent.EXTRA_TEXT, urlEditText.text)
+                        type = "text/plain"
+                    }
+
+                    val shareIntent = Intent.createChooser(sendIntent, null)
+                    startActivity(shareIntent)
+                }
                 true
             }
 

@@ -58,10 +58,23 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.go_icon -> {
-                // checks if the url contains http or https
                 var uri = "${urlEditText.text}"
-                if (!uri.contains("http://") && !uri.contains("https://"))
-                    uri = "http://$uri"
+
+                // url regex
+                val regex = Regex("http(s)?://(\\w+\\.)*(\\w+)(:\\d+)?")
+
+                // match
+                val match = regex.find(uri, 0)
+
+                if (match != null) {
+                    // checks if the url contains http or https
+                    if (!uri.contains("http://") && !uri.contains("https://"))
+                        uri = "http://$uri"
+                } else {
+                    val uriAux = uri.replace(" ", "%20")
+                    uri = "https://google.com/search?q=$uriAux"
+
+                }
 
                 webView.loadUrl(uri)
                 true

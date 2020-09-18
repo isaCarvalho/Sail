@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/go_icon"
+        android:title="@string/go"
+        android:icon="@drawable/ic_go"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/clear_icon"
+        android:title="@string/clear"
+        android:icon="@drawable/ic_clear"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/home_icon"
+        android:icon="@drawable/ic_home"
+        android:title="@string/home"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/history_icon"
+        android:title="@string/history" />
+
+    <item
+        android:id="@+id/fav_icon"
+        android:title="@string/favorites"/>
+</menu>

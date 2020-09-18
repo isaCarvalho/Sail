@@ -11,6 +11,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.EditText
 import androidx.appcompat.widget.Toolbar
+import com.isabela.sail.client.MainWebViewClient
 import com.isabela.sail.util.URI_TAG
 
 class MainActivity : AppCompatActivity() {
@@ -28,13 +29,13 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         // finding by id
-        webView = findViewById(R.id.webView)
-        webView.settings.javaScriptEnabled = true
-        webView.webViewClient = WebViewClient()
-        webView.loadUrl("https://www.google.com")
-
         urlEditText = findViewById(R.id.urlEditText)
         urlEditText.setText(R.string.home_url)
+
+        webView = findViewById(R.id.webView)
+        webView.settings.javaScriptEnabled = true
+        webView.webViewClient = MainWebViewClient(urlEditText)
+        webView.loadUrl("https://www.google.com")
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

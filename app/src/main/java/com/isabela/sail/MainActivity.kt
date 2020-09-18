@@ -3,19 +3,22 @@ package com.isabela.sail
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.webkit.WebView
-import android.webkit.WebViewClient
 import android.widget.EditText
 import androidx.appcompat.widget.Toolbar
 import com.isabela.sail.client.MainWebViewClient
-import com.isabela.sail.util.URI_TAG
 
+/**
+ * class MainActivity
+ * This is the main activity for the Sail Browser.
+ * Sail is a basic browser created to learn the usage of android's web view
+ */
 class MainActivity : AppCompatActivity() {
 
+    // Declares the components
     private lateinit var webView : WebView
     private lateinit var urlEditText: EditText
     private lateinit var toolbar : Toolbar
@@ -25,43 +28,53 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // toolbar
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        // finding by id
+        // edit text
         urlEditText = findViewById(R.id.urlEditText)
         urlEditText.setText(R.string.home_url)
 
+        // web view
         webView = findViewById(R.id.webView)
         webView.settings.javaScriptEnabled = true
         webView.webViewClient = MainWebViewClient(urlEditText)
         webView.loadUrl("https://www.google.com")
     }
 
+    /**
+     * This method inflates the menu
+     */
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.main_menu, menu)
         return true
     }
 
+    /**
+     * This method sets the menu events
+     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.go_icon -> {
+                // checks if the url contains http or https
                 var uri = "${urlEditText.text}"
                 if (!uri.contains("http://") && !uri.contains("https://"))
-                    uri = "https://$uri"
+                    uri = "http://$uri"
 
-                Log.i(URI_TAG, uri)
                 webView.loadUrl(uri)
                 true
             }
 
             R.id.clear_icon -> {
+                // clears the text
                 urlEditText.setText("")
                 true
             }
 
             R.id.home_icon -> {
+                // redirects to google as home page
                 webView.loadUrl("https://www.google.com")
                 urlEditText.setText(R.string.home_url)
                 true
@@ -71,6 +84,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Go back in the history when the back key is pressed
+     */
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK && webView.canGoBack()) {
             webView.goBack()

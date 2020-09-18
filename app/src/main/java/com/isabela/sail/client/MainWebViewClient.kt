@@ -6,6 +6,9 @@ import android.widget.EditText
 
 class MainWebViewClient(private val editText: EditText) : WebViewClient() {
 
+    /**
+     * Changes the url when the pages changes
+     */
     override fun onPageCommitVisible(view: WebView?, url: String?) {
         if (view != null) {
             editText.setText(view.url.toString())

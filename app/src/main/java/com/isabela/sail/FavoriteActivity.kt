@@ -11,22 +11,22 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.isabela.sail.adapter.HistoryAdapter
-import com.isabela.sail.viewmodel.HistoryViewModel
+import com.isabela.sail.adapter.FavoriteAdapter
+import com.isabela.sail.viewmodel.FavoriteViewModel
 
-class HistoryActivity : AppCompatActivity() {
+class FavoriteActivity : AppCompatActivity() {
 
     private lateinit var toolbar : Toolbar
-    private lateinit var viewModel : HistoryViewModel
+    private lateinit var viewModel : FavoriteViewModel
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter : HistoryAdapter
+    private lateinit var adapter : FavoriteAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_history)
+        setContentView(R.layout.activity_favorite)
 
         // toolbar
-        toolbar = findViewById(R.id.history_toolbar)
+        toolbar = findViewById(R.id.favorite_toolbar)
         setSupportActionBar(toolbar)
 
         initRecyclerView()
@@ -51,8 +51,8 @@ class HistoryActivity : AppCompatActivity() {
     }
 
     private fun initRecyclerView() {
-        recyclerView = findViewById(R.id.historyRecycler)
-        adapter = HistoryAdapter(this)
+        recyclerView = findViewById(R.id.favoriteRecycler)
+        adapter = FavoriteAdapter(this)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
     }
@@ -60,16 +60,16 @@ class HistoryActivity : AppCompatActivity() {
     private fun initViewModel() {
         // view model
         viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory(application))
-            .get(HistoryViewModel::class.java)
+            .get(FavoriteViewModel::class.java)
 
-        viewModel.allItems.observe(this, Observer { historyItem ->
-            historyItem.let { adapter.setHistory(it) }
+        viewModel.allFavorites.observe(this, Observer { favorite ->
+            favorite.let { adapter.setFavorite(it) }
         })
     }
 
     companion object {
         fun start(context : Context) {
-            val intent = Intent(context, HistoryActivity::class.java)
+            val intent = Intent(context, FavoriteActivity::class.java)
             context.startActivity(intent)
         }
     }

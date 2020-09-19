@@ -10,15 +10,17 @@ import android.view.Menu
 import android.view.MenuItem
 import android.webkit.WebView
 import android.widget.EditText
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import com.isabela.sail.client.MainWebViewClient
+import com.isabela.sail.model.Favorite
 import com.isabela.sail.model.HistoryItem
+import com.isabela.sail.viewmodel.FavoriteViewModel
 import com.isabela.sail.viewmodel.HistoryViewModel
 import com.isabela.sail.viewmodel.MainViewModel
 import java.time.LocalDateTime
-import java.util.*
 
 /**
  * class MainActivity
@@ -104,6 +106,25 @@ class MainActivity : AppCompatActivity() {
                 HistoryActivity.start(this)
                 true
             }
+
+            R.id.fav_icon -> {
+                FavoriteActivity.start(this)
+                true
+            }
+
+            R.id.fav_add_icon -> {
+                // view model
+                val favoriteViewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory(application))
+                    .get(FavoriteViewModel::class.java)
+
+                val uri = viewModel.validateURL(webView.url)
+                favoriteViewModel.insert(Favorite(uri))
+
+                Toast.makeText(this, "Added to favorites!", Toast.LENGTH_SHORT)
+                    .show()
+                true
+            }
+
             else -> true
         }
     }

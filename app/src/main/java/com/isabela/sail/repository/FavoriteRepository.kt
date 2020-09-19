@@ -12,11 +12,11 @@ class FavoriteRepository(private val favoriteDao: FavoriteDao)
         favoriteDao.insert(favorite)
     }
 
-    suspend fun update(favorite: Favorite) {
-        favoriteDao.update(favorite)
-    }
-
     suspend fun delete(favorite: Favorite) {
         favoriteDao.delete(favorite)
+    }
+
+    suspend fun deleteAll() {
+        favoriteDao.deleteAll()
     }
 }

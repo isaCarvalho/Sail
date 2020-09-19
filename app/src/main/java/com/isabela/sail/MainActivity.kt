@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity() {
                 val historyViewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory(application))
                     .get(HistoryViewModel::class.java)
 
-                historyViewModel.insert(HistoryItem(uri, LocalDateTime.now().toString().replace("T", "")))
+                historyViewModel.insert(HistoryItem(uri, LocalDateTime.now().toString().replace("T", "\n")))
                 true
             }
 

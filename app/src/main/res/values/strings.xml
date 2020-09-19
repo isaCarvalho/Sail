@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Sail</string>
-    <string name="https_url_com">https://url.com</string>
     <string name="go">Go</string>
     <string name="home">Home</string>
     <string name="home_url">https://www.google.com</string>

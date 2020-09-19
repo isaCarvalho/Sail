@@ -10,29 +10,31 @@
         android:id="@+id/favorite_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        android:elevation="@dimen/imgMargin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/ic_back"
-        android:backgroundTint="@color/colorPrimary"
-        android:elevation="@dimen/imgMargin"
         app:title="@string/favorites"/>
 
     <ScrollView
         android:id="@+id/favoriteScroll"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:backgroundTint="@color/colorPrimaryDark"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:backgroundTint="@color/colorPrimaryDark"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/favorite_toolbar">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/favoriteRecycler"
-            android:backgroundTint="@color/colorPrimaryDark"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorPrimaryDark" />
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

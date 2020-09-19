@@ -34,6 +34,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var urlEditText: EditText
     private lateinit var toolbar : Toolbar
     private lateinit var viewModel : MainViewModel
+    private lateinit var favoriteViewModel : FavoriteViewModel
+    private lateinit var historyViewModel: HistoryViewModel
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,6 +49,14 @@ class MainActivity : AppCompatActivity() {
         // view model
         viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory(application))
             .get(MainViewModel::class.java)
+
+        // favorites view model
+        favoriteViewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory(application))
+            .get(FavoriteViewModel::class.java)
+
+        // history view model
+        historyViewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory(application))
+            .get(HistoryViewModel::class.java)
 
         // edit text
         urlEditText = findViewById(R.id.urlEditText)
@@ -77,10 +87,6 @@ class MainActivity : AppCompatActivity() {
             R.id.go_icon -> {
                 val uri = viewModel.validateURL("${urlEditText.text}")
                 webView.loadUrl(uri)
-
-                // view model
-                val historyViewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory(application))
-                    .get(HistoryViewModel::class.java)
 
                 historyViewModel.insert(HistoryItem(uri, LocalDateTime.now().toString().replace("T", "\n")))
                 true
@@ -113,10 +119,6 @@ class MainActivity : AppCompatActivity() {
             }
 
             R.id.fav_add_icon -> {
-                // view model
-                val favoriteViewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory(application))
-                    .get(FavoriteViewModel::class.java)
-
                 val uri = viewModel.validateURL(webView.url)
                 favoriteViewModel.insert(Favorite(uri))
 
@@ -155,8 +157,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadHome() {
         // redirects to google as home page
-        webView.loadUrl("https://www.google.com")
-        urlEditText.setText(R.string.home_url)
+        webView.loadUrl(resources.getString(R.string.home_url))
+        urlEditText.setText(resources.getString(R.string.home_url))
     }
 
     private fun clearText() {

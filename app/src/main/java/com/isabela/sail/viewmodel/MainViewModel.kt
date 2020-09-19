@@ -1,8 +1,6 @@
 package com.isabela.sail.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.isabela.sail.util.URI_TAG
 
 class MainViewModel : ViewModel()
 {
@@ -24,7 +22,6 @@ class MainViewModel : ViewModel()
             newUri = "https://google.com/search?q=$uriAux"
 
         }
-        Log.i(URI_TAG, newUri)
         return newUri
     }
 }

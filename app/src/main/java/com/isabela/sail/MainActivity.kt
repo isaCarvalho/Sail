@@ -2,6 +2,7 @@ package com.isabela.sail
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.KeyEvent
@@ -9,10 +10,15 @@ import android.view.Menu
 import android.view.MenuItem
 import android.webkit.WebView
 import android.widget.EditText
+import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import com.isabela.sail.client.MainWebViewClient
+import com.isabela.sail.model.HistoryItem
+import com.isabela.sail.viewmodel.HistoryViewModel
 import com.isabela.sail.viewmodel.MainViewModel
+import java.time.LocalDateTime
+import java.util.*
 
 /**
  * class MainActivity
@@ -63,11 +69,18 @@ class MainActivity : AppCompatActivity() {
     /**
      * This method sets the menu events
      */
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.go_icon -> {
                 val uri = viewModel.validateURL("${urlEditText.text}")
                 webView.loadUrl(uri)
+
+                // view model
+                val historyViewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory(application))
+                    .get(HistoryViewModel::class.java)
+
+                historyViewModel.insert(HistoryItem(uri, LocalDateTime.now().toString().replace("T", "")))
                 true
             }
 
@@ -87,6 +100,10 @@ class MainActivity : AppCompatActivity() {
                 true
             }
 
+            R.id.history_icon -> {
+                HistoryActivity.start(this)
+                true
+            }
             else -> true
         }
     }

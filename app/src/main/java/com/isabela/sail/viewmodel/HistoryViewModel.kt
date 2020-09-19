@@ -29,7 +29,7 @@ class HistoryViewModel(application: Application) : AndroidViewModel(application)
         repository.delete(historyItem)
     }
 
-    fun update(historyItem: HistoryItem) = viewModelScope.launch(Dispatchers.IO) {
-        repository.update(historyItem)
+    fun deleteAll() = viewModelScope.launch(Dispatchers.IO) {
+        repository.deleteAll()
     }
 }

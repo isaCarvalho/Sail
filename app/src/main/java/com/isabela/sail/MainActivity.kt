@@ -10,7 +10,9 @@ import android.view.MenuItem
 import android.webkit.WebView
 import android.widget.EditText
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.ViewModelProvider
 import com.isabela.sail.client.MainWebViewClient
+import com.isabela.sail.viewmodel.MainViewModel
 
 /**
  * class MainActivity
@@ -23,6 +25,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var webView : WebView
     private lateinit var urlEditText: EditText
     private lateinit var toolbar : Toolbar
+    private lateinit var viewModel : MainViewModel
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,15 +36,19 @@ class MainActivity : AppCompatActivity() {
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
+        // view model
+        viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory(application))
+            .get(MainViewModel::class.java)
+
         // edit text
         urlEditText = findViewById(R.id.urlEditText)
-        urlEditText.setText(R.string.home_url)
 
         // web view
         webView = findViewById(R.id.webView)
         webView.settings.javaScriptEnabled = true
         webView.webViewClient = MainWebViewClient(urlEditText)
-        webView.loadUrl("https://www.google.com")
+
+        loadHome()
     }
 
     /**
@@ -59,52 +66,24 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.go_icon -> {
-                var uri = "${urlEditText.text}"
-
-                // url regex
-                val regex = Regex("http(s)?://(\\w+\\.)*(\\w+)(:\\d+)?")
-
-                // match
-                val match = regex.find(uri, 0)
-
-                if (match != null) {
-                    // checks if the url contains http or https
-                    if (!uri.contains("http://") && !uri.contains("https://"))
-                        uri = "http://$uri"
-                } else {
-                    val uriAux = uri.replace(" ", "%20")
-                    uri = "https://google.com/search?q=$uriAux"
-
-                }
-
+                val uri = viewModel.validateURL("${urlEditText.text}")
                 webView.loadUrl(uri)
                 true
             }
 
             R.id.clear_icon -> {
                 // clears the text
-                urlEditText.setText("")
+                clearText()
                 true
             }
 
             R.id.home_icon -> {
-                // redirects to google as home page
-                webView.loadUrl("https://www.google.com")
-                urlEditText.setText(R.string.home_url)
+                loadHome()
                 true
             }
 
             R.id.share_icon -> {
-                if (urlEditText.text.isNotEmpty()) {
-                    val sendIntent = Intent().apply {
-                        action = Intent.ACTION_SEND
-                        putExtra(Intent.EXTRA_TEXT, urlEditText.text)
-                        type = "text/plain"
-                    }
-
-                    val shareIntent = Intent.createChooser(sendIntent, null)
-                    startActivity(shareIntent)
-                }
+                share("${urlEditText.text}")
                 true
             }
 
@@ -121,5 +100,28 @@ class MainActivity : AppCompatActivity() {
         }
 
         return true
+    }
+
+    private fun share(uri : String) {
+        if (uri.isNotEmpty()) {
+            val sendIntent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, uri)
+                type = "text/plain"
+            }
+
+            val shareIntent = Intent.createChooser(sendIntent, null)
+            startActivity(shareIntent)
+        }
+    }
+
+    private fun loadHome() {
+        // redirects to google as home page
+        webView.loadUrl("https://www.google.com")
+        urlEditText.setText(R.string.home_url)
+    }
+
+    private fun clearText() {
+        urlEditText.setText("")
     }
 }

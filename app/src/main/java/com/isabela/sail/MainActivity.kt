@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.snackbar.Snackbar
 import com.isabela.sail.client.MainWebViewClient
 import com.isabela.sail.model.Favorite
 import com.isabela.sail.model.HistoryItem
@@ -64,8 +65,10 @@ class MainActivity : AppCompatActivity() {
         // web view
         webView = findViewById(R.id.webView)
         webView.settings.javaScriptEnabled = true
+        webView.settings.setSupportZoom(true)
+        webView.settings.allowFileAccess = true
+        webView.settings.allowFileAccessFromFileURLs = true
         webView.webViewClient = MainWebViewClient(urlEditText)
-
         loadHome()
     }
 
@@ -85,10 +88,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.go_icon -> {
-                val uri = viewModel.validateURL("${urlEditText.text}")
-                webView.loadUrl(uri)
-
-                historyViewModel.insert(HistoryItem(uri, LocalDateTime.now().toString().replace("T", "\n")))
+                goToPage()
                 true
             }
 
@@ -119,18 +119,13 @@ class MainActivity : AppCompatActivity() {
             }
 
             R.id.fav_add_icon -> {
-                val uri = viewModel.validateURL(webView.url)
-                favoriteViewModel.insert(Favorite(uri))
-
-                Toast.makeText(this, "Added to favorites!", Toast.LENGTH_SHORT)
-                    .show()
+                addToFavorites()
                 true
             }
 
             else -> true
         }
     }
-
     /**
      * Go back in the history when the back key is pressed
      */
@@ -140,6 +135,25 @@ class MainActivity : AppCompatActivity() {
         }
 
         return true
+    }
+
+    private fun addToFavorites() {
+        val uri = viewModel.validateURL(webView.url)
+        favoriteViewModel.insert(Favorite(uri))
+
+        Toast.makeText(this, "Added to favorites!", Toast.LENGTH_SHORT)
+            .show()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun goToPage() {
+        val uri = viewModel.validateURL("${urlEditText.text}")
+        webView.loadUrl(uri)
+
+        Snackbar.make(webView, "Loading...", Snackbar.LENGTH_LONG)
+            .setAction("Action", null).show()
+
+        historyViewModel.insert(HistoryItem(uri, LocalDateTime.now().toString().replace("T", "\n")))
     }
 
     private fun share(uri : String) {
